@@ -64,6 +64,8 @@ const createSocket = topicId => {
       console.log("Unable to join", resp);
     });
 
+  channel.on(`comments:${topicId}:new`, renderComment);
+
   document.querySelector("button").addEventListener("click", () => {
     const content = document.querySelector("textarea").value;
 
@@ -71,16 +73,27 @@ const createSocket = topicId => {
   });
 };
 
+function renderComment(event) {
+  const renderedComment = commentMarkup(event.comment);
+
+  document.querySelector(".collection").innerHTML += renderedComment;
+}
+
+// Initial render pass
 function renderComments(comments) {
   const renderedComments = comments.map(comment => {
-    return `
-      <li class="collection-item">
-        ${comment.content}
-      </li>
-    `;
+    return commentMarkup(comment);
   });
 
   document.querySelector(".collection").innerHTML = renderedComments.join("");
+}
+
+function commentMarkup(comment) {
+  return `
+    <li class="collection-item">
+      ${comment.content}
+    </li>
+  `;
 }
 
 window.createSocket = createSocket;
