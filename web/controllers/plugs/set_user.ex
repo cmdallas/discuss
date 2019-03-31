@@ -16,7 +16,7 @@ defmodule Discuss.Plugs.SetUser do
         assign(conn, :user, user)
 
       true ->
-        assign(conn, :user, nil)
+        assign(conn, :user, %{id: 0})
     end
   end
 end
